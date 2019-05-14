@@ -12,7 +12,7 @@ namespace ProLog3Server
     {
         static async Task Main(string[] args)
         {
-            Console.Title = Globals.App.Name;
+            Console.Title = $"{Globals.App.Name} {Globals.App.Version}";
             await Task.Delay(1);
             // C:\ProgramData\Rowa\Protocol\ProLog3Server\ProLog3Server
             // Log und WWi
@@ -38,8 +38,9 @@ namespace ProLog3Server
                         communication.Send(new Table.Messages.SetLightsResponse().SetStateOk());
                         break;
                     case Table.Messages.TurnRelativeRequest turnRelative:
-                        Console.WriteLine($"TurnRelativ start".LogInfo());
-                        await Task.Delay(TimeSpan.FromSeconds(2));
+                        int wait = 2;
+                        Console.WriteLine($"TurnRelativ start and wait={wait} seconds".LogInfo());
+                        await Task.Delay(TimeSpan.FromSeconds(wait));
                         Console.WriteLine($"TurnRelativ ready".LogInfo());
                         communication.Send(new Table.Messages.TurnRelativeResponse().SetStateOk());
                         break;
@@ -49,7 +50,7 @@ namespace ProLog3Server
                 }
             });
 
-            Console.WriteLine("Stop With Return");
+            Console.WriteLine("End with return");
             Console.ReadLine();
             Console.WriteLine($"{Globals.App.Name} finshed".LogInfo());
         }

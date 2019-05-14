@@ -1,6 +1,6 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-
+var rootDir= MakeAbsolute(Directory("./"));
 
 Task("DeleteProLogGlobalPackages")
 .Does(() => {
@@ -28,7 +28,7 @@ Task("DeleteBinAndObj")
 .Does(() => {
     foreach(var name in new string[] {"bin", "obj"} )
     {
-        var rootDir= MakeAbsolute(Directory("./"));
+  
         Information($"Check for folders \"{name}\" in {rootDir}");
         foreach(var dir in GetDirectories($"{rootDir}/src/**/{name}"))
         {
@@ -56,7 +56,27 @@ Task("RestoreSolution")
 
 Task("BuildSolution")
 .Does(() => {
-    DotNetCoreRestore("EagSample.sln");
+    DotNetCoreBuild("EagSample.sln", new DotNetCoreBuildSettings{
+        Configuration= configuration
+    });
+});
+
+Task("ExecClient")
+.Does(() => {
+    if (GetFiles($"{rootDir}/src/*client/**/*.exe").FirstOrDefault() is var exe && exe is object)
+             System.Diagnostics.Process.Start(exe.FullPath);
+});
+
+Task("ExecServer")
+.Does(() => {
+    if (GetFiles($"{rootDir}/src/*server/**/*.exe").FirstOrDefault() is var exe && exe is object)
+        System.Diagnostics.Process.Start(exe.FullPath);
+});
+
+Task("ExecPrograms")
+.IsDependentOn("ExecServer")
+.IsDependentOn("ExecClient")
+.Does(() => {
 });
 
 Task("Default")
@@ -64,7 +84,7 @@ Task("Default")
 .IsDependentOn("RestoreSolution")
 .IsDependentOn("BuildSolution")
 .Does(() => {
-   Information("Hello Cake!");
+   Information("Hello EagSample!");
 });
 
 try {
@@ -73,4 +93,5 @@ RunTarget(target);
 catch(Exception ex)
 {
     Error(ex);
+    Console.ReadLine();
 }

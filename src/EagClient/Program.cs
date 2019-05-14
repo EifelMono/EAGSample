@@ -5,6 +5,7 @@ using ProLog.Core;
 using ProLog.RowaLog;
 using ProLog.Core.Log;
 using Table = ProLog3.Communication.ImageProcessing.Table;
+using System.Diagnostics;
 
 namespace EagClient
 {
@@ -12,7 +13,7 @@ namespace EagClient
     {
         static async Task Main(string[] args)
         {
-            Console.Title = Globals.App.Name;
+            Console.Title = $"{Globals.App.Name} {Globals.App.Version}";
             // C:\ProgramData\Rowa\Protocol\EagClient\EagClient
             // Log und WWi
             using var rowaLogProxy = new RowaLogProxy(Globals.App.Name, false);
@@ -33,23 +34,25 @@ namespace EagClient
                 Console.WriteLine($"Table recevied {message?.GetType().Name ?? "unkown"}".LogInfo());
             });
 
-            Console.WriteLine("c => ende\r\nl => setlights\r\nt => turntable\r\n");
+            Console.WriteLine("Make your selection\r\nreturn => ende\r\ns => setlights\r\nt => turntable\r\n");
             bool running = true;
             while (running)
             {
                 while (!Console.KeyAvailable)
                     await Task.Delay(100);
-
                 var key = Console.ReadKey();
+                Console.WriteLine();
+                var elapsedTime = Stopwatch.StartNew();
                 switch (key.KeyChar)
                 {
+                    case '\r':
                     case 'c':
                     case 'C':
                         running = false;
                         break;
 
-                    case 'l':
-                    case 'L':
+                    case 's':
+                    case 'S':
                         {
                             var result = await TableCommunication.Send(new Table.Messages.SetLightsRequest
                             {
@@ -93,6 +96,8 @@ namespace EagClient
                         }
                         break;
                 }
+                elapsedTime.Stop();
+                Console.WriteLine($"time {elapsedTime.ElapsedMilliseconds} milliseconds".LogInfo());
             }
             Console.WriteLine($"{Globals.App.Name} finshed".LogInfo());
         }
