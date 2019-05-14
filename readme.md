@@ -5,18 +5,20 @@
 * [dotnet core](http://dot.net)
   * dotnet preview mindestens [dotnet v3.0.0-preview5](https://dotnet.microsoft.com/download/dotnet-core/3.0)
     * Warum 3.0 
-      * kann exe erzeugen
+      * kann als Kompilat eine exe erzeugen
         * später auch alles in eine Exe Datei
-      * kein unötiges ausführen mit "dotnet name.dll"  
-  * die Version wird hier auch in die global.json eingetragen
+      * Kein unötiges ausführen mit "dotnet name.dll"  
+  * Die Version ist hier auch in der global.json eingetragen
     * dotnet --version 
-    * Zeigt die zum kompilieren verwendet dotnet core version an, und diese wird durch die global.json bestimmt.
+    * Zeigt die zum kompilieren verwendete dotnet core version an, und diese wird durch die global.json bestimmt.
 * [Visual Studio 2019](https://visualstudio.microsoft.com/de/vs/)
 
 ## Infos
 
 * globale nuget Pakete liegen jetzt unter [C:\users\\{name}\\.nuget\packages]() 
-* csproj struktur ist anders
+* rowa nuget packete liegen in .\nuget
+* nuget.config steuer bzw. erweitern wo die nugets herkommen 
+* csproj sind im neuen Format
 
 ## Übersetzen
 
@@ -31,6 +33,27 @@
         * ```Set-ExecutionPolicy -ExecutionPolicy RemoteSigned```
   * build.cmd ausführen (ruft ./build.ps auf)
     * run.cmd starten, startet client und server Programme
+
+## weitere Infos
+
+### Es gibt 4 Schnittstellen
+
+* Position3D
+* Size3D
+* Table
+* Ocr
+
+In dem Beispiel ist nur die Table Schnittstelle implementiert mit folgenden 2 Funktionen
+
+* SetLightsRequest
+  * => SetLightsResponse
+
+* TurnRelativeRequest
+  * => TurnRelativeResponse (Wartzeit bis die antwort gesendet wird 2 Sekunden)
+
+
+
+
 
 
 
