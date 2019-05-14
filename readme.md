@@ -30,7 +30,7 @@
       * Powershell benötigt folgende berechtigungen
         * ```Set-ExecutionPolicy -ExecutionPolicy RemoteSigned```
   * build.cmd ausführen (ruft ./build.ps auf)
-    * run.cmd starten startet client und server
+    * run.cmd starten, startet client und server Programme
 
 
 
