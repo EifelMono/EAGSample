@@ -74,7 +74,7 @@ OcrCommunication.Messages
       * Result
         * State => CommunicationMessageResultState
           *  Unknown, Ok, SystemNotReady, Error, RequestWrongProperties,
-        * Message => List<string> 
+        * Messages => List of string 
 * **Event**
 
 ### Senden
