@@ -158,6 +158,42 @@ else
 }
 ```
 
+#### ICommunicationMessageResult in  MessageResponse
+``` cs --region icommunicationmessageresult --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+// Message erzeugen
+var message = new Table.Messages.TurnRelativeResponse
+{ /* und füllen */ };
+
+// Result setzen 
+// ok Meldungen
+message.Result.State = CommunicationMessageResultState.Ok;
+message.Result.Messages.Add("Mit Message");
+message.SetStateOk();
+message.SetStateOk("Mit Message");
+
+// FehlerMeldungen
+message.Result.State = CommunicationMessageResultState.Error;
+message.SetStateError();
+message.SetStateError("Mit Message");
+message.SetStateError(new Exception());
+message.SetStateSystemNotReady();
+message.SetStateSystemNotReady("Mit Message");
+// weitere könnten folgen
+
+// Message abfragen
+if (message.Result.State == CommunicationMessageResultState.Ok)
+{ }
+if (message.IsOk())
+{ }
+
+if (message.Result.State == CommunicationMessageResultState.Error)
+{ }
+if (message.IsError())
+{ }
+
+var messages = message.Result.Messages; // Hier stehen die Fehlermeldungen drin.
+#endregion
+```
 
 
 
