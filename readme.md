@@ -1,5 +1,6 @@
 # EagSamples
 
+#### doc.md [c#](./doc.md)
 #### try.md [Try.Dot.Net local](./try.md)
 
 ## Voraussetzung
