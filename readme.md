@@ -1,6 +1,6 @@
 # EagSamples
 
-#### try.md [Home](./try.md)
+#### try.md [Try.Dot.Net local](./try.md)
 
 ## Voraussetzung
 

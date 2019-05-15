@@ -1,40 +1,36 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable IDE0060 // Remove unused parameter
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ProLog.Communication.Core;
 using ProLog.Core;
+using ProLog.Core.Log;
 using ProLog.RowaLog;
+using Table = ProLog3.Communication.ImageProcessing.Table;
 
 namespace EAGTry
 {
     class Program
     {
-        static async Task Main(string region = null,
+        static async Task<int> Main(string region = null,
              string session = null,
              string package = null,
              string project = null,
              string[] args = null)
         {
+            await Task.Delay(1);
             using var rowaLogProxy = new RowaLogProxy(Globals.App.Name, false);
 
-            var  cancellationTokenSource = new CancellationTokenSource();
+            var cancellationTokenSource = new CancellationTokenSource();
             Console.CancelKeyPress += (sender, e) => cancellationTokenSource.Cancel();
 
-            var server = new Server();
-            var serverTask= server.RunAsync(cancellationTokenSource.Token);
-            var client = new Client();
-            var clientTask= client.RunAsync(cancellationTokenSource.Token);
-
-            switch (region)
+            return region switch
             {
-                case "setlights":
-                    client.SetLights(client.ClientTableCommunication);
-                    break;
-                case "turntable":
-                    client.TurnTable(client.ClientTableCommunication);
-                    break;
-            }
-            await Task.WhenAll(serverTask, clientTask);
+                "setlights" => await new Client().SetLightsAsync(),
+                "turntable" => await new Client().TurnTableAsync(),
+                _ => 0
+            };
         }
     }
 }

@@ -9,25 +9,26 @@ Es ist noch nicht alles .........
 
 ## Loggen
 
-```csharp
+``` cs --region usinglog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 using ProLog.RowaLog;
 using ProLog.Core.Log;
+``` 
 
+``` cs --region voidlog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 // RowaLogProxy("Product", "Component")
 // C:\ProgramData\Rowa\Protocol\Product\Component
 var rowaLogProxy = new RowaLogProxy(Globals.App.Name);
 
-try 
+try
 {
-  "Info".LogInfo();
-  "Error".LogError();
-  "Debug".LogDebug();
-  "Audit".LogAudit();
+    "Info".LogInfo();
+    "Error".LogError();
+    "Debug".LogDebug();
+    "Audit".LogAudit();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     ex.LogException();
-    ex.LogException(ex, "Dies ist ein Test".LogInfo());
 }
 
 rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht beendet
