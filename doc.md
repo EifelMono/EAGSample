@@ -32,9 +32,7 @@ catch (Exception ex)
 rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht beendet
 ```
 
-## Communication 
-
-## Interface
+## Communication Benutzung
 
 ### using
 ``` cs --region usingcommunication --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
