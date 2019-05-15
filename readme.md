@@ -51,10 +51,4 @@ In dem Beispiel ist nur die Table Schnittstelle implementiert mit folgenden 2 Fu
 * TurnRelativeRequest
   * => TurnRelativeResponse (Wartzeit bis die antwort gesendet wird 2 Sekunden)
 
-
-
-
-
-
-
-
+weitere [Documentation](https://github.com/EifelMono/EAGSample/blob/master/doc.md) hier!
