@@ -9,6 +9,7 @@
 *.userosscache
 *.sln.docstates
 
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -255,3 +256,5 @@ tools/**
 
 # Appolon removed
 **/Code/Apollon/**
+
+package_*.binlog

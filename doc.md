@@ -1,19 +1,15 @@
 # Documentation
-
 Es ist noch nicht alles .........
 
 ## Source
-
 * alles als Nuget Packete
 * alles netstandard 2.0 format
 
 ## Loggen
-
 ``` cs --region usinglog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 using ProLog.RowaLog;
 using ProLog.Core.Log;
 ``` 
-
 ``` cs --region voidlog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 // RowaLogProxy("Product", "Component")
 // C:\ProgramData\Rowa\Protocol\Product\Component
@@ -34,28 +30,28 @@ catch (Exception ex)
 rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht beendet
 ```
 
-
 ## Communication 
 
 ## Interface
 
 ### using
-
-```csharp
+``` cs --region usingcommunication --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 using Position3D = ProLog3.Communication.ImageProcessing.Position3D;
 using Size3D = ProLog3.Communication.ImageProcessing.Size3D;
 using Table = ProLog3.Communication.ImageProcessing.Table;
 using Ocr = ProLog3.Communication.ImageProcessing.Ocr;
-  ```
+```
 
 ### Communication
-
-// Host leer => Server
-```csharp
-var Position3DCommunication = new Position3D.ImageProcessingCommunication(Port, Host optional)
-var Size3DCommunication = new Size3D.ImageProcessingCommunication(Port, Host optional)
-var TableCommunication = new Table.ImageProcessingCommunication(Port, Host])
-var OcrCommunication = new Ocr.ImageProcessingCommunication(Port, Host])
+``` cs --region createcommunication --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+var port = 4711;
+var host = "127.0.0.1";
+// host is optional, 
+// if host is null or empty the communication is running as a server
+var Position3DCommunication = new Position3D.ImageProcessingCommunication(port, host);
+var Size3DCommunication = new Size3D.ImageProcessingCommunication(port, host);
+var TableCommunication = new Table.ImageProcessingCommunication(port, host);
+var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
 ```
 
 ### Messages
