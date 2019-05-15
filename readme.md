@@ -1,5 +1,7 @@
 # EagSamples
 
+#### try.md [Home](./try.md)
+
 ## Voraussetzung
 
 * [dotnet core](http://dot.net)
