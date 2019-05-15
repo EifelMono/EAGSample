@@ -1,6 +1,8 @@
 # Documentation
 Es ist noch nicht alles .........
 
+Demos immer anhand von Table Communication!
+
 ## Source
 * alles als Nuget Packete
 * alles netstandard 2.0 format
@@ -67,50 +69,96 @@ OcrCommunication.Messages
 
 * **Request**
     * **Response**
-    * mit Interface ICommunicationMessageResult (CommunicationMessageResult)
-      * Result
-        * State => CommunicationMessageResultState
-          *  Unknown, Ok, SystemNotReady, Error, RequestWrongProperties,
-        * Messages => List of string 
+        * mit Interface ICommunicationMessageResult (CommunicationMessageResult)
+            * Result
+                * State => CommunicationMessageResultState
+                * Unknown, Ok, SystemNotReady, Error, RequestWrongProperties,
+            * Messages => List of string 
 * **Event**
 
 ### Senden
 
-```csharp
-Communication.Send(message)
+``` cs --region sendmessage --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+// Communication.Send(message)
+TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 ```
 
 ### Empfangen
 
-#### über event
-```csharp
-var eventHandler = Communication.OnReceived.Add(
-    (communication, message) => { /* todo */  });
+#### Event
+``` cs --region receiveevent --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+var eventHandler = TableCommunication.OnReceived.Add(
+    (communication, message) =>
+    {
+        switch (message)
+        {
+            case Table.Messages.TurnRelativeRequest turnRelative:
+                communication.Send(new Table.Messages.TurnRelativeResponse().SetStateOk());
+                break;
+            default:
+                Console.WriteLine($"unhandled message {message?.GetType().Name ?? "unkown"}".LogError());
+                break;
+        }
+    });
 
-Communication.OnReceived.Remove(eventHandler);
+
+// wenn der Handler nicht mehr benötigt wird entfernen
+TableCommunication.OnReceived.Remove(eventHandler);
 ```
-#### über Wait
+#### Wait
+``` cs --region receivemessage --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+ await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
+// mit timeout oder CancellationToken
+var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 
-```csharp
-await Communication.WaitAsync<message>();
-
-// mt timeout oder CancellationToken
-await Communication.WaitAsync<message>(TimeSpan.FromSeconds(....));
-
-
-Communication.Send(messageRequest);
+// Prüfung der Antwort
+if (result.Ok)
+{
+    "Es ist eine Antwort vorhanden".LogInfo();
+    // in value steht die response message
+    if (result.Value.IsOk()) 
+    {
+        "Die Antwort vom Server is auch Ok".LogInfo();
+    }
+    // Hier die Langform und .....
+    if (result.Value.Result.State== CommunicationMessageResultState.Ok)
+    {
+        "Die Antwort vom Server is auch Ok".LogInfo();
+        // IsOk() is eine Extension methode für das 
+        // interface ICommunicationMessageResult das alle Response haben sollten
+        // public static bool IsOk(this ICommunicationMessageResult thisValue)
+        //  => thisValue.Result?.State.IsOk() ?? false;
+    }
+}
+else
+    "Timeout".LogInfo();
+``` 
+#### Wait wenn zwischen Senden und Empfangen Zeit vergeht (**fehlerhaft**)
+``` cs --region receivemessageproblem --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 // hier verbraten wir Zeit
-await Communication.WaitAsync<messageResonse>();
+var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 // Jetzt kann es sein das die Nachricht vor dem Aufruf
-// von WaitAsync schon da ist !!!! Also geht die verloren
-
-// abhilfe mit einer Marke!
-var mark= Communication.Send(messageRequest);
-// hier verbraten wir Zeit
-await mark.WaitAsync<messageResonse>();
-// Jetzt geht die Naricht nicht verloren
+// von WaitAsync schon da ist und WaitAsync gibt result.Ok mit false zurück
 ```
-
+#### Wait wenn zwischen Senden und Empfangen Zeit vergeht mit Marker
+``` cs --region receivemessagemark --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
+// hier verbraten wir Zeit
+var result = await mark.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
+if (result.Ok)
+{
+    if (result.Value.IsOk())
+    {
+    }
+    else
+    {
+    }
+}
+else
+{
+}
+```
 
 
 

@@ -12,6 +12,8 @@ using Ocr = ProLog3.Communication.ImageProcessing.Ocr;
 
 using System;
 using ProLog.Core;
+using ProLog.Communication.Core;
+using System.Threading.Tasks;
 
 namespace EAGTry
 {
@@ -41,7 +43,7 @@ namespace EAGTry
             #endregion
         }
 
-        public void voidCommunication()
+        public async Task VoidCommunication()
         {
             #region createcommunication 
             var port = 4711;
@@ -53,6 +55,95 @@ namespace EAGTry
             var TableCommunication = new Table.ImageProcessingCommunication(port, host);
             var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
             #endregion
+
+            {
+                #region sendmessage
+                // Communication.Send(message)
+                TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
+                #endregion
+            }
+
+            {
+                #region receiveevent
+                var eventHandler = TableCommunication.OnReceived.Add(
+                    (communication, message) =>
+                    {
+                        switch (message)
+                        {
+                            case Table.Messages.TurnRelativeRequest turnRelative:
+                                communication.Send(new Table.Messages.TurnRelativeResponse().SetStateOk());
+                                break;
+                            default:
+                                Console.WriteLine($"unhandled message {message?.GetType().Name ?? "unkown"}".LogError());
+                                break;
+                        }
+                    });
+
+
+                // wenn der Handler nicht mehr benötigt wird entfernen
+                TableCommunication.OnReceived.Remove(eventHandler);
+                #endregion
+            }
+
+            {
+                #region receivemessage
+                await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
+
+                // mit timeout oder CancellationToken
+                var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
+
+                // Prüfung der Antwort
+                if (result.Ok)
+                {
+                    "Es ist eine Antwort vorhanden".LogInfo();
+                    // in value steht die response message
+                    if (result.Value.IsOk())
+                    {
+                        "Die Antwort vom Server is auch Ok".LogInfo();
+                    }
+                    // Hier die Langform und .....
+                    if (result.Value.Result.State == CommunicationMessageResultState.Ok)
+                    {
+                        "Die Antwort vom Server is auch Ok".LogInfo();
+                        // IsOk() is eine Extension methode für das 
+                        // interface ICommunicationMessageResult das alle Response haben sollten
+                        // public static bool IsOk(this ICommunicationMessageResult thisValue)
+                        //  => thisValue.Result?.State.IsOk() ?? false;
+                    }
+                }
+                else
+                    "Timeout".LogInfo();
+                #endregion
+            }
+
+            {
+                #region receivemessageproblem
+                TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
+                // hier verbraten wir Zeit
+                var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
+                // Jetzt kann es sein das die Nachricht vor dem Aufruf
+                // von WaitAsync schon da ist und WaitAsync gibt result.Ok mit false zurück
+                #endregion
+            }
+            {
+                #region receivemessagemark
+                var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
+                // hier verbraten wir Zeit
+                var result = await mark.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
+                if (result.Ok)
+                {
+                    if (result.Value.IsOk())
+                    {
+                    }
+                    else
+                    {
+                    }
+                }
+                else
+                {
+                }
+                #endregion
+            }
         }
     }
 }
