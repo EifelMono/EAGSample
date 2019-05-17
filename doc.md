@@ -105,21 +105,27 @@ TableCommunication.OnReceived.Remove(eventHandler);
 ```
 #### Wait
 ``` cs --region receivemessage --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
- await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
+await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
+
 // mit timeout oder CancellationToken
 var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 
 // Prüfung der Antwort
+// später IsOk()
+// später ReceivedOk
+// später IsReceiveOk()
 if (result.Ok)
 {
     "Es ist eine Antwort vorhanden".LogInfo();
     // in value steht die response message
-    if (result.Value.IsOk()) 
+    // später kann auch Message verwendet werden
+    // result.Message.IsOk()
+    if (result.Value.IsOk())
     {
         "Die Antwort vom Server is auch Ok".LogInfo();
     }
     // Hier die Langform und .....
-    if (result.Value.Result.State== CommunicationMessageResultState.Ok)
+    if (result.Value.Result.State == CommunicationMessageResultState.Ok)
     {
         "Die Antwort vom Server is auch Ok".LogInfo();
         // IsOk() is eine Extension methode für das 

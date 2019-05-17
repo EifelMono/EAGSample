@@ -93,10 +93,15 @@ namespace EAGTry
                 var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 
                 // Prüfung der Antwort
+                // später IsOk()
+                // später ReceivedOk
+                // später IsReceiveOk()
                 if (result.Ok)
                 {
                     "Es ist eine Antwort vorhanden".LogInfo();
                     // in value steht die response message
+                    // später kann auch Message verwendet werden
+                    // result.Message.IsOk()
                     if (result.Value.IsOk())
                     {
                         "Die Antwort vom Server is auch Ok".LogInfo();
