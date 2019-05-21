@@ -29,14 +29,18 @@ namespace EAGTry
 
             try
             {
-                "Info".LogInfo();
-                "Error".LogError();
                 "Debug".LogDebug();
+                "UserIn".LogUserIn();
+                "ExtIf".LogExtIf();
+                "Info".LogInfo();
+                "Warning".LogWarning();
+                "Error".LogError();
+                "Fatal".LogFatal();
                 "Audit".LogAudit();
             }
             catch (Exception ex)
             {
-                ex.LogException();
+                ex.LogException(); // LogFatal
             }
 
             rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht beendet

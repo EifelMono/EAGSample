@@ -42,14 +42,15 @@ else
 using var TableCommunication = new Table.ImageProcessingCommunication(4711, "127.0.0.1").DoRun();
 if (!await TableCommunication.WaitConnectedAsync(TimeSpan.FromSeconds(2)))
     return 0;
-if (await TableCommunication.SendAndWaitAsync<Table.Messages.SetLightsResponse>(new Table.Messages.SetLightsRequest
-{
-    Top = true,
-    Bottom = true,
-    SideLeft = false,
-    SideMiddle = false,
-    SideRight = false
-}) is var result && result.IsMessageOk())
+if (await TableCommunication.SendAndWaitAsync<Table.Messages.SetLightsResponse>
+    (new Table.Messages.SetLightsRequest
+    {
+        Top = true,
+        Bottom = true,
+        SideLeft = false,
+        SideMiddle = false,
+        SideRight = false
+    }) is var result && result.IsMessageOk())
     Console.WriteLine("message Ok");
 else
     Console.WriteLine(@"error infos in the logs C:\ProgramData\Rowa\Protocol\EagClient\EagClient");
@@ -86,11 +87,11 @@ if (!await TableCommunication.WaitConnectedAsync(TimeSpan.FromSeconds(2)))
     return 0;
 
 if (await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>(
-                    new Table.Messages.TurnRelativeRequest
-                    {
-                        Angle = 0.0,
-                        Velocity = 0,
-                    }) is var result && result.IsMessageOk())
+    new Table.Messages.TurnRelativeRequest
+    {
+        Angle = 0.0,
+        Velocity = 0,
+    }) is var result && result.IsMessageOk())
     Console.WriteLine("message Ok");
 else
     Console.WriteLine(@"error infos in the logs C:\ProgramData\Rowa\Protocol\EagClient\EagClient");
