@@ -1,11 +1,20 @@
 # Documentation
-Es ist noch nicht alles .........
-
 Demos immer anhand von Table Communication!
 
 ## Source
-* alles als Nuget Packete
 * alles netstandard 2.0 format
+* alles aus Nuget Packeten
+  * RowaLog.*.nupkg
+  * ProLog.Core.*.nupkg
+  * ProLog.RowaLog.*.nupkg
+  * ProLog3.Types.*.nupkg
+  * ProLog.Communication.Core.*.nupkg
+  * ProLog3.Communication.ImageProcessing.Position3D.*.nupkg
+  * ProLog3.Communication.ImageProcessing.Size3D.*.nupkg
+  * ProLog3.Communication.ImageProcessing.Table3D.*.nupkg
+  * ProLog3.Communication.ImageProcessing.Ocr3D.*.nupkg
+* Nuget.Config bestimmt wo die Packete herkommen 
+
 
 ## Loggen
 ``` cs --region usinglog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
@@ -19,14 +28,18 @@ var rowaLogProxy = new RowaLogProxy(Globals.App.Name);
 
 try
 {
-    "Info".LogInfo();
-    "Error".LogError();
     "Debug".LogDebug();
+    "UserIn".LogUserIn();
+    "ExtIf".LogExtIf();
+    "Info".LogInfo();
+    "Warning".LogWarning();
+    "Error".LogError();
+    "Fatal".LogFatal();
     "Audit".LogAudit();
 }
 catch (Exception ex)
 {
-    ex.LogException();
+    ex.LogException(); // LogFatal
 }
 
 rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht beendet
@@ -58,16 +71,16 @@ var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
 
 #### Namenspace Messages
   
-Position3D.Messages
-Size3D.Messages
-Table.Messages
-OcrCommunication.Messages
+* Position3D.Messages
+* Size3D.Messages
+* Table.Messages
+* OcrCommunication.Messages
 
 ### Typen
 
 * **Request**
     * **Response**
-        * mit Interface ICommunicationMessageResult (CommunicationMessageResult)
+        * mit Interface **ICommunicationMessageResult** (CommunicationMessageResult)
             * Result
                 * State => CommunicationMessageResultState
                 * Unknown, Ok, SystemNotReady, Error, RequestWrongProperties,
@@ -110,32 +123,41 @@ await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
 // mit timeout oder CancellationToken
 var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 
-// Prüfung der Antwort
-// später IsOk()
-// später ReceivedOk
-// später IsReceiveOk()
-if (result.Ok)
+// A. Prüfung der Antwort
+if (result.IsOk())
 {
     "Es ist eine Antwort vorhanden".LogInfo();
-    // in value steht die response message
-    // später kann auch Message verwendet werden
-    // result.Message.IsOk()
-    if (result.Value.IsOk())
-    {
+    // in message steht die response message
+    if (result.Message.IsOk())
         "Die Antwort vom Server is auch Ok".LogInfo();
-    }
     // Hier die Langform und .....
-    if (result.Value.Result.State == CommunicationMessageResultState.Ok)
-    {
+    if (result.Message.Result.State == CommunicationMessageResultState.Ok)
         "Die Antwort vom Server is auch Ok".LogInfo();
-        // IsOk() is eine Extension methode für das 
-        // interface ICommunicationMessageResult das alle Response haben sollten
-        // public static bool IsOk(this ICommunicationMessageResult thisValue)
-        //  => thisValue.Result?.State.IsOk() ?? false;
-    }
 }
 else
     "Timeout".LogInfo();
+
+// B. oder kurz und die Fehler stehen im log
+if (result.IsMessageOk())
+{
+    "Die Antwort vom Server is auch Ok".LogInfo();
+}
+``` 
+#### Send and Wait
+``` cs --region receivemessagewithsend --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+var result1 = await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>
+    (new Table.Messages.TurnRelativeRequest(0, 100.0), TimeSpan.FromSeconds(1));
+if (result1.IsMessageOk())
+{
+    // everthing is ok
+};
+
+if (await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>
+    (new Table.Messages.TurnRelativeRequest(0, 100.0), TimeSpan.FromSeconds(1))
+    is var result2 && result2.IsMessageOk())
+{
+    // everthing is ok
+};
 ``` 
 #### Wait wenn zwischen Senden und Empfangen Zeit vergeht (**fehlerhaft**)
 ``` cs --region receivemessageproblem --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
@@ -150,9 +172,9 @@ var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeRespo
 var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 // hier verbraten wir Zeit
 var result = await mark.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
-if (result.Ok)
+if (result.IsOk())
 {
-    if (result.Value.IsOk())
+    if (result.Message.IsOk())
     {
     }
     else
@@ -165,10 +187,11 @@ else
 ```
 
 #### ICommunicationMessageResult in  MessageResponse
-``` cs --region icommunicationmessageresult --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+
+##### beim Senden
+``` cs --region icommunicationmessageresultsend --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
 // Message erzeugen
-var message = new Table.Messages.TurnRelativeResponse
-{ /* und füllen */ };
+var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 
 // Result setzen 
 // ok Meldungen
@@ -184,7 +207,15 @@ message.SetStateError("Mit Message");
 message.SetStateError(new Exception());
 message.SetStateSystemNotReady();
 message.SetStateSystemNotReady("Mit Message");
-// weitere könnten folgen
+
+// Oder durch boolschen Wert
+message.SetState(true); // => message.SetStateOk();
+message.SetState(false); // => message.SetStateError();
+```
+##### beim Empfangen
+``` cs --region icommunicationmessageresultreceive --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+// Message erzeugen
+var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 
 // Message abfragen
 if (message.Result.State == CommunicationMessageResultState.Ok)
@@ -198,7 +229,6 @@ if (message.IsError())
 { }
 
 var messages = message.Result.Messages; // Hier stehen die Fehlermeldungen drin.
-#endregion
 ```
 
 

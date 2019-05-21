@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using ProLog.Communication.Core;
 using ProLog.Core;
-using ProLog.RowaLog;
 using ProLog.Core.Log;
+using ProLog.RowaLog;
 using Table = ProLog3.Communication.ImageProcessing.Table;
 
 namespace ProLog3Server
@@ -39,6 +39,12 @@ namespace ProLog3Server
                         break;
                     case Table.Messages.TurnRelativeRequest turnRelative:
                         int wait = 2;
+                        if (turnRelative.Velocity < 100)
+                        {
+                            communication.Send(new Table.Messages.TurnRelativeResponse().SetStateError($"Velocity {turnRelative.Velocity} less 100"));
+                            return;
+                        }
+
                         Console.WriteLine($"TurnRelativ start and wait={wait} seconds".LogInfo());
                         await Task.Delay(TimeSpan.FromSeconds(wait));
                         Console.WriteLine($"TurnRelativ ready".LogInfo());

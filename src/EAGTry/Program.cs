@@ -27,8 +27,10 @@ namespace EAGTry
 
             return region switch
             {
-                "setlights" => await new Client().SetLightsAsync(),
-                "turntable" => await new Client().TurnTableAsync(),
+                "setlights1" => await new Client().SetLights1Async(),
+                "turntable1" => await new Client().TurnTable1Async(),
+                "setlights2" => await new Client().SetLights2Async(),
+                "turntable2" => await new Client().TurnTable2Async(),
                 _ => 0
             };
         }

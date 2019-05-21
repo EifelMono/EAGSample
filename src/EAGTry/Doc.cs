@@ -92,35 +92,45 @@ namespace EAGTry
                 // mit timeout oder CancellationToken
                 var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
 
-                // Prüfung der Antwort
-                // später IsOk()
-                // später ReceivedOk
-                // später IsReceiveOk()
-                if (result.Ok)
+                // A. Prüfung der Antwort
+                if (result.IsOk())
                 {
                     "Es ist eine Antwort vorhanden".LogInfo();
-                    // in value steht die response message
-                    // später kann auch Message verwendet werden
-                    // result.Message.IsOk()
-                    if (result.Value.IsOk())
-                    {
+                    // in message steht die response message
+                    if (result.Message.IsOk())
                         "Die Antwort vom Server is auch Ok".LogInfo();
-                    }
                     // Hier die Langform und .....
-                    if (result.Value.Result.State == CommunicationMessageResultState.Ok)
-                    {
+                    if (result.Message.Result.State == CommunicationMessageResultState.Ok)
                         "Die Antwort vom Server is auch Ok".LogInfo();
-                        // IsOk() is eine Extension methode für das 
-                        // interface ICommunicationMessageResult das alle Response haben sollten
-                        // public static bool IsOk(this ICommunicationMessageResult thisValue)
-                        //  => thisValue.Result?.State.IsOk() ?? false;
-                    }
                 }
                 else
                     "Timeout".LogInfo();
+
+                // B. oder kurz und die Fehler stehen im log
+                if (result.IsMessageOk())
+                {
+                    "Die Antwort vom Server is auch Ok".LogInfo();
+                }
                 #endregion
             }
 
+            {
+                #region receivemessagewithsend
+                var result1 = await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>
+                    (new Table.Messages.TurnRelativeRequest(0, 100.0), TimeSpan.FromSeconds(1));
+                if (result1.IsMessageOk())
+                {
+                    // everthing is ok
+                };
+
+                if (await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>
+                    (new Table.Messages.TurnRelativeRequest(0, 100.0), TimeSpan.FromSeconds(1))
+                    is var result2 && result2.IsMessageOk())
+                {
+                    // everthing is ok
+                };
+                #endregion
+            }
             {
                 #region receivemessageproblem
                 TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
@@ -135,9 +145,9 @@ namespace EAGTry
                 var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
                 // hier verbraten wir Zeit
                 var result = await mark.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
-                if (result.Ok)
+                if (result.IsOk())
                 {
-                    if (result.Value.IsOk())
+                    if (result.Message.IsOk())
                     {
                     }
                     else
@@ -151,10 +161,9 @@ namespace EAGTry
             }
 
             {
-                #region icommunicationmessageresult
+                #region icommunicationmessageresultsend
                 // Message erzeugen
-                var message = new Table.Messages.TurnRelativeResponse
-                { /* und füllen */ };
+                var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 
                 // Result setzen 
                 // ok Meldungen
@@ -170,7 +179,17 @@ namespace EAGTry
                 message.SetStateError(new Exception());
                 message.SetStateSystemNotReady();
                 message.SetStateSystemNotReady("Mit Message");
-                // weitere könnten folgen
+
+                // Oder durch boolschen Wert
+                message.SetState(true); // => message.SetStateOk();
+                message.SetState(false); // => message.SetStateError();
+                #endregion
+            }
+
+            {
+                #region icommunicationmessageresultreceive
+                // Message erzeugen
+                var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 
                 // Message abfragen
                 if (message.Result.State == CommunicationMessageResultState.Ok)
