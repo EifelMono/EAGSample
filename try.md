@@ -42,23 +42,17 @@ else
 using var TableCommunication = new Table.ImageProcessingCommunication(4711, "127.0.0.1").DoRun();
 if (!await TableCommunication.WaitConnectedAsync(TimeSpan.FromSeconds(2)))
     return 0;
-var result = await TableCommunication.Send(new Table.Messages.SetLightsRequest
+if (await TableCommunication.SendAndWaitAsync<Table.Messages.SetLightsResponse>(new Table.Messages.SetLightsRequest
 {
     Top = true,
     Bottom = true,
     SideLeft = false,
     SideMiddle = false,
     SideRight = false
-}).WaitAsync<Table.Messages.SetLightsResponse>();
-if (result.IsOk()) // No Timeout
-{
-    if (result.Message.IsOk())
-        Console.WriteLine("Client SetLight Ok".LogInfo());
-    else
-        Console.WriteLine("Client SetLight Server Error".LogError());
-}
+}) is var result && result.IsMessageOk())
+    Console.WriteLine("message Ok");
 else
-    Console.WriteLine("Client SetLight Client TimeOut".LogError());
+    Console.WriteLine(@"error infos in the logs C:\ProgramData\Rowa\Protocol\EagClient\EagClient");
 ```
 
 ### TurnTable
