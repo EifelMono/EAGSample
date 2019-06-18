@@ -80,7 +80,7 @@ Task("ExecPrograms")
 });
 
 Task("Default")
-.IsDependentOn("NuGetCleanUp")
+// .IsDependentOn("NuGetCleanUp")
 .IsDependentOn("RestoreSolution")
 .IsDependentOn("BuildSolution")
 .Does(() => {

@@ -9,14 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="RowaLog" Version="1.4.2" />
-    <PackageReference Include="ProLog.Core" Version="1.0.2" />
-    <PackageReference Include="ProLog3.Types" Version="1.0.2" />
-    <PackageReference Include="ProLog.RowaLog" Version="1.0.2" />
-    <PackageReference Include="ProLog.Communication.Core" Version="1.0.2" />
-    <PackageReference Include="ProLog3.Communication.ImageProcessing.Position3D" Version="1.0.2" />
-    <PackageReference Include="ProLog3.Communication.ImageProcessing.Size3D" Version="1.0.2" />
-    <PackageReference Include="ProLog3.Communication.ImageProcessing.Table" Version="1.0.2" />
-    <PackageReference Include="ProLog3.Communication.ImageProcessing.Ocr" Version="1.0.2" />
+    <PackageReference Include="ProLog.Core" Version="1.0.3" />
+    <PackageReference Include="ProLog3.Types" Version="1.0.3" />
+    <PackageReference Include="ProLog.RowaLog" Version="1.0.3" />
+    <PackageReference Include="ProLog.Communication.Core" Version="1.0.3" />
+    <PackageReference Include="ProLog3.Communication.ImageProcessing.Position3D" Version="1.0.3" />
+    <PackageReference Include="ProLog3.Communication.ImageProcessing.Size3D" Version="1.0.3" />
+    <PackageReference Include="ProLog3.Communication.ImageProcessing.Table" Version="1.0.3" />
+    <PackageReference Include="ProLog3.Communication.ImageProcessing.Ocr" Version="1.0.3" />
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,7 @@ namespace EagClient
             // C:\ProgramData\Rowa\Protocol\EagClient\EagClient
             // Log und WWi
             using var rowaLogProxy = new RowaLogProxy(Globals.App.Name, true);
-            using var TableCommunication = new Table.ImageProcessingCommunication(4711, "127.0.0.1")
+            using var TableCommunication = new Table.ImageProcessingCommunication(6002, "127.0.0.1")
                 .DoRun();
 
             TableCommunication.OnConnect.Add((communication, socket) =>
@@ -54,8 +54,8 @@ namespace EagClient
                         {
                             var result = await TableCommunication.Send(new Table.Messages.SetLightsRequest
                             {
-                                Top = true,
-                                Bottom = true,
+                                Top = false,
+                                Bottom = false,
                                 SideLeft = false,
                                 SideMiddle = false,
                                 SideRight = false
@@ -77,9 +77,9 @@ namespace EagClient
                             {
                                 Top = true,
                                 Bottom = true,
-                                SideLeft = false,
-                                SideMiddle = false,
-                                SideRight = false
+                                SideLeft = true,
+                                SideMiddle = true,
+                                SideRight = true
                             }) is var result && result.IsMessageOk())
                                 Console.WriteLine("message Ok");
                             else
@@ -91,7 +91,7 @@ namespace EagClient
                         {
                             var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest
                             {
-                                Angle = 0.0,
+                                Angle = 90.0,
                                 Velocity = 100,
                             });
 
