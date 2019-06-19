@@ -7,10 +7,10 @@
 ## Voraussetzung
 
 * [dotnet core](http://dot.net)
-  * dotnet preview mindestens [dotnet v3.0.0-preview5](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+  * dotnet preview mindestens [dotnet v3.0.0-preview6](https://dotnet.microsoft.com/download/dotnet-core/3.0)
     * Warum 3.0 
       * kann als Kompilat eine exe erzeugen
-        * später auch alles in eine Exe Datei
+        * [Making a tiny .NET Core 3.0 entirely self-contained single executable](https://www.hanselman.com/blog/MakingATinyNETCore30EntirelySelfcontainedSingleExecutable.aspx)
       * Kein unötiges ausführen mit "dotnet name.dll"  
   * Die Version ist hier auch in der global.json eingetragen
     * dotnet --version 
@@ -19,9 +19,8 @@
 
 ## Infos
 
-* globale nuget Pakete liegen jetzt unter [C:\users\\{name}\\.nuget\packages]() 
-* rowa nuget packete liegen in .\nuget
-* nuget.config steuer bzw. erweitern wo die nugets herkommen 
+* nuget Pakete befinden sich auf [myget](https://www.myget.org/F/rowa/auth/28de5fa5-9592-451d-a8e9-e769859e2061/api/v3/index.json) 
+* Die source ist in nuget.config eingetagen 
 * csproj sind im neuen Format
 
 ## Übersetzen

@@ -14,6 +14,7 @@ Demos immer anhand von Table Communication!
   * ProLog3.Communication.ImageProcessing.Table3D.*.nupkg
   * ProLog3.Communication.ImageProcessing.Ocr3D.*.nupkg
 * Nuget.Config bestimmt wo die Packete herkommen 
+* https://www.myget.org/F/rowa/auth/28de5fa5-9592-451d-a8e9-e769859e2061/api/v3/index.json
 
 
 ## Loggen
