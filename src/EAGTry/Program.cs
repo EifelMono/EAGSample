@@ -13,7 +13,14 @@ namespace EAGTry
 {
     class Program
     {
-        static async Task<int> Main(string region = null,
+        ///<param name="region">Takes in the --region option from the code fence options in markdown</param>
+        ///<param name="session">Takes in the --session option from the code fence options in markdown</param>
+        ///<param name="package">Takes in the --package option from the code fence options in markdown</param>
+        ///<param name="project">Takes in the --project option from the code fence options in markdown</param>
+        ///<param name="args">Takes in any additional arguments passed in the code fence options in markdown</param>
+        ///<see>To learn more see <a href="https://aka.ms/learntdn">our documentation</a></see>
+        static async Task<int> Main(
+             string region = null,
              string session = null,
              string package = null,
              string project = null,
@@ -27,12 +34,19 @@ namespace EAGTry
 
             return region switch
             {
-                "setlights1" => await new Client().SetLights1Async(),
-                "turntable1" => await new Client().TurnTable1Async(),
-                "setlights2" => await new Client().SetLights2Async(),
-                "turntable2" => await new Client().TurnTable2Async(),
-                _ => 0
+                "eagtrytest" => TryTest(),
+                "setlights" => await Client.SetLightsAsync(),
+                "turntable" => await Client.TurnTableAsync(),
+                _ => throw new ArgumentException("A --region argument must be passed", nameof(region))
             };
+        }
+
+        public static int TryTest()
+        {
+            #region eagtrytest
+            Console.WriteLine("Hello EagTry");
+            #endregion
+            return 0;
         }
     }
 }

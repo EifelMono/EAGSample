@@ -1,8 +1,17 @@
 # EagSamples
 
-#### doc.md [c#](./doc.md)
-#### try.md [Try.Dot.Net local](./try.md)
-#### more [confluence](https://bdrowa.atlassian.net/wiki/spaces/RP/pages/626590139/Software+Dokumente)
+#### Interface Dokumentation  [c# DOC.md](./src/EAGTry/DOC.md)
+#### Interactive Client Beispiel [EAGTry.md](./src/EAGTry/EAGTRY.md)
+* Vorraussetzung für Interactive Client Sample
+  * **dotnet core** 2.1 und dotnet core 3.0 preview 6
+  * **dotnet-try** (1.0.19317.5) 
+    * installieren
+      * **```dotnet tool install dotnet-try -g```**
+      * oder updaten **```dotnet tool update dotnet-try -g```**
+  * Starten 
+    * **```dotnet-try```** in dem Directory wo EAGSample.sln liegt aufrufen 
+    
+#### weitere Schnittstellenbeschreibung [BD Rowa Confluence](https://bdrowa.atlassian.net/wiki/spaces/RP/pages/729907512/Schnittstelle+Eckelmann)
 
 ## Voraussetzung
 
@@ -13,7 +22,7 @@
         * [Making a tiny .NET Core 3.0 entirely self-contained single executable](https://www.hanselman.com/blog/MakingATinyNETCore30EntirelySelfcontainedSingleExecutable.aspx)
       * Kein unötiges ausführen mit "dotnet name.dll"  
   * Die Version ist hier auch in der global.json eingetragen
-    * dotnet --version 
+    * ```dotnet --version``` 
     * Zeigt die zum kompilieren verwendete dotnet core version an, und diese wird durch die global.json bestimmt.
 * [Visual Studio 2019](https://visualstudio.microsoft.com/de/vs/)
 

@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.2.0-alpha.19176.2" />
+    <PackageReference Include="System.CommandLine.Experimental" Version="0.2.0-alpha.19176.2" />
     <PackageReference Include="RowaLog" Version="1.4.2" />
     <PackageReference Include="ProLog.Core" Version="1.0.3" />
     <PackageReference Include="ProLog3.Types" Version="1.0.3" />
@@ -17,8 +19,6 @@
     <PackageReference Include="ProLog3.Communication.ImageProcessing.Size3D" Version="1.0.3" />
     <PackageReference Include="ProLog3.Communication.ImageProcessing.Table" Version="1.0.3" />
     <PackageReference Include="ProLog3.Communication.ImageProcessing.Ocr" Version="1.0.3" />
-    <PackageReference Include="System.CommandLine.DragonFruit" Version="0.2.0-alpha.19176.2" />
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.2.0-alpha.19176.2" />
   </ItemGroup>
 
 </Project>

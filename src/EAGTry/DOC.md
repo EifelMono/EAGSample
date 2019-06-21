@@ -18,11 +18,11 @@ Demos immer anhand von Table Communication!
 
 
 ## Loggen
-``` cs --region usinglog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region usinglog
 using ProLog.RowaLog;
 using ProLog.Core.Log;
 ``` 
-``` cs --region voidlog --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region voidlog
 // RowaLogProxy("Product", "Component")
 // C:\ProgramData\Rowa\Protocol\Product\Component
 var rowaLogProxy = new RowaLogProxy(Globals.App.Name);
@@ -49,7 +49,7 @@ rowaLogProxy.Dispose(); // Ist Notwendig sonst wird ein Thread in RowaLog nicht 
 ## Communication Benutzung
 
 ### using
-``` cs --region usingcommunication --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region usingcommunication
 using Position3D = ProLog3.Communication.ImageProcessing.Position3D;
 using Size3D = ProLog3.Communication.ImageProcessing.Size3D;
 using Table = ProLog3.Communication.ImageProcessing.Table;
@@ -57,7 +57,7 @@ using Ocr = ProLog3.Communication.ImageProcessing.Ocr;
 ```
 
 ### Communication
-``` cs --region createcommunication --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region createcommunication
 var port = 4711;
 var host = "127.0.0.1";
 // host is optional, 
@@ -89,8 +89,7 @@ var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
 * **Event**
 
 ### Senden
-
-``` cs --region sendmessage --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region sendmessage
 // Communication.Send(message)
 TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 ```
@@ -98,7 +97,7 @@ TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 ### Empfangen
 
 #### Event
-``` cs --region receiveevent --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region receiveevent
 var eventHandler = TableCommunication.OnReceived.Add(
     (communication, message) =>
     {
@@ -118,7 +117,7 @@ var eventHandler = TableCommunication.OnReceived.Add(
 TableCommunication.OnReceived.Remove(eventHandler);
 ```
 #### Wait
-``` cs --region receivemessage --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region receivemessage
 await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>();
 
 // mit timeout oder CancellationToken
@@ -145,7 +144,7 @@ if (result.IsMessageOk())
 }
 ``` 
 #### Send and Wait
-``` cs --region receivemessagewithsend --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region receivemessagewithsend
 var result1 = await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeResponse>
     (new Table.Messages.TurnRelativeRequest(0, 100.0), TimeSpan.FromSeconds(1));
 if (result1.IsMessageOk())
@@ -161,7 +160,7 @@ if (await TableCommunication.SendAndWaitAsync<Table.Messages.TurnRelativeRespons
 };
 ``` 
 #### Wait wenn zwischen Senden und Empfangen Zeit vergeht (**fehlerhaft**)
-``` cs --region receivemessageproblem --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region receivemessageproblem
 TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 // hier verbraten wir Zeit
 var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
@@ -169,7 +168,7 @@ var result = await TableCommunication.WaitAsync<Table.Messages.TurnRelativeRespo
 // von WaitAsync schon da ist und WaitAsync gibt result.Ok mit false zurück
 ```
 #### Wait wenn zwischen Senden und Empfangen Zeit vergeht mit Marker
-``` cs --region receivemessagemark --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region receivemessagemark
 var mark = TableCommunication.Send(new Table.Messages.TurnRelativeRequest(0, 100.0));
 // hier verbraten wir Zeit
 var result = await mark.WaitAsync<Table.Messages.TurnRelativeResponse>(TimeSpan.FromSeconds(1));
@@ -190,7 +189,7 @@ else
 #### ICommunicationMessageResult in  MessageResponse
 
 ##### beim Senden
-``` cs --region icommunicationmessageresultsend --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region icommunicationmessageresultsend
 // Message erzeugen
 var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 
@@ -214,7 +213,7 @@ message.SetState(true); // => message.SetStateOk();
 message.SetState(false); // => message.SetStateError();
 ```
 ##### beim Empfangen
-``` cs --region icommunicationmessageresultreceive --source-file .\src\EagTry\doc.cs --project .\src\EagTry\EagTry.csproj
+``` cs --source-file .\doc.cs --project .\EagTry.csproj --region icommunicationmessageresultreceive
 // Message erzeugen
 var message = new Table.Messages.TurnRelativeResponse { /* und füllen */ };
 

@@ -19,7 +19,6 @@ namespace EAGTry
 {
     class Doc
     {
-
         public void VoidLog()
         {
             #region voidlog
