@@ -37,6 +37,7 @@ namespace EAGTry
                 "eagtrytest" => TryTest(),
                 "setlights" => await Client.SetLightsAsync(),
                 "turntable" => await Client.TurnTableAsync(),
+                "turntableerror" => await Client.TurnTableErrorAsync(),
                 _ => throw new ArgumentException("A --region argument must be passed", nameof(region))
             };
         }

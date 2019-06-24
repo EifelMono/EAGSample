@@ -114,8 +114,16 @@ namespace EagClient
                                 {
                                     Angle = 0.0,
                                     Velocity = 0,
-                                }) is var result && result.IsMessageOk())
-                                Console.WriteLine("message Ok");
+                                }) is var result && result.IsOk())
+                            {
+                                if (result.Message.IsOk())
+                                    Console.WriteLine("Message Ok");
+                                else
+                                {
+                                    Console.WriteLine("Message Not Ok");
+                                    Console.WriteLine(result.Message.Result.MessagesAsString);
+                                }
+                            }
                             else
                                 Console.WriteLine(@"error infos in the logs C:\ProgramData\Rowa\Protocol\EagClient\EagClient");
                         }

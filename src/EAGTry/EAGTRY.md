@@ -15,3 +15,8 @@ The first run usually does not work! (Internal Server Error)
 ```cs --source-file ./Client.cs --project ./EAGTry.csproj --region turntable
 ```
 
+## turntable error and error with more details in Client.cs
+
+```cs --source-file ./Client.cs --project ./EAGTry.csproj --region turntableerror
+```
+
