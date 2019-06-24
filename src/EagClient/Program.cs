@@ -40,7 +40,7 @@ namespace EagClient
             {
                 while (!Console.KeyAvailable)
                     await Task.Delay(100);
-                var key = Console.ReadKey();
+                var key = Console.ReadKey(true);
                 Console.WriteLine();
                 var elapsedTime = Stopwatch.StartNew();
                 switch (key.KeyChar)

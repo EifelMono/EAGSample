@@ -12,7 +12,8 @@
             "program": "${workspaceFolder}/src/EagClient/bin/Debug/netcoreapp3.0/EAGClient.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/EagClient",
-            "console": "internalConsole",
+            // "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopAtEntry": false
         },
         {
