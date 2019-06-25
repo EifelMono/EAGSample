@@ -1,4 +1,5 @@
-﻿using System;
+﻿#pragma warning disable IDE0067 // Dispose objects before losing scope
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ProLog.Communication.Core;
@@ -11,7 +12,9 @@ namespace EagClient
 {
     class Program
     {
+#pragma warning disable IDE0060 // Remove unused parameter
         static async Task Main(string[] args)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             Console.Title = $"{Globals.App.Name} {Globals.App.Version}";
             // C:\ProgramData\Rowa\Protocol\EagClient\EagClient

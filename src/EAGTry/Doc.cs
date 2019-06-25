@@ -53,10 +53,10 @@ namespace EAGTry
             var host = "127.0.0.1";
             // host is optional, 
             // if host is null or empty the communication is running as a server
-            var Position3DCommunication = new Position3D.ImageProcessingCommunication(port, host);
-            var Size3DCommunication = new Size3D.ImageProcessingCommunication(port, host);
-            var TableCommunication = new Table.ImageProcessingCommunication(port, host);
-            var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
+            using var Position3DCommunication = new Position3D.ImageProcessingCommunication(port, host);
+            using var Size3DCommunication = new Size3D.ImageProcessingCommunication(port, host);
+            using var TableCommunication = new Table.ImageProcessingCommunication(port, host);
+            using var OcrCommunication = new Ocr.ImageProcessingCommunication(port, host);
             #endregion
 
             {

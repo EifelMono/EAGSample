@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0067 // Dispose objects before losing scope
 using System;
 using System.Threading.Tasks;
 using ProLog.Communication.Core;
@@ -61,7 +62,8 @@ namespace EAGTry
         public static async Task<int> TurnTableErrorAsync()
         {
             #region turntableerror
-            using var TableCommunication = new Table.ImageProcessingCommunication(6002, "127.0.0.1").DoRun();
+            using var TableCommunication = new Table.ImageProcessingCommunication(6002, "127.0.0.1");
+            TableCommunication.Start();
             if (!await TableCommunication.WaitConnectedAsync(TimeSpan.FromSeconds(2)))
             {
                 Console.WriteLine("Not connected");
@@ -82,13 +84,13 @@ namespace EAGTry
                     else
                     {
                         Console.WriteLine("Messge not ok");
-                        Console.WriteLine(result.Message?.Result?.MessagesAsString?? "");
+                        Console.WriteLine(result.Message?.Result?.MessagesAsString ?? "");
                     }
                 }
                 else
                 {
                     Console.WriteLine(@"error infos in the logs C:\ProgramData\Rowa\Protocol\EAGTry\EAGTry");
-                    Console.WriteLine(result.Exception?.Message?? "");
+                    Console.WriteLine(result.Exception?.Message ?? "");
                 }
             #endregion
             return 0;

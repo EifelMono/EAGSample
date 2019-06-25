@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0067 // Dispose objects before losing scope
 using System;
 using System.Threading;
 using System.Threading.Tasks;
