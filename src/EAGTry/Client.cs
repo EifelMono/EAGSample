@@ -10,6 +10,16 @@ namespace EAGTry
 {
     public static class Client
     {
+        public static async Task<int> RowaLogZipCleanUpAsync()
+        {
+            #region rowalogzipcleanup
+            Console.WriteLine("Wait to run zip in RowaLog");
+            await Task.Delay(TimeSpan.FromSeconds(10));
+            Console.WriteLine("Ready");
+            #endregion
+            return 0;
+        }
+
         public static async Task<int> SetLightsAsync()
         {
             #region setlights
